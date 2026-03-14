@@ -28,8 +28,6 @@ theme:
         icon: material/brightness-4
         name: Светлая тема
   features:
-    - navigation.tabs
-    - navigation.sections
     - navigation.top
     - navigation.footer
     - content.code.copy
@@ -55,6 +53,9 @@ markdown_extensions:
   - toc:
       permalink: true
 
+extra_javascript:
+  - assets/javascripts/header-link.js
+
 plugins:
   - search:
       lang: ru
@@ -62,12 +63,10 @@ plugins:
       minify_html: true
 
 nav:
-  - Главная: index.md
-  - Статьи:
-    - 1. Основы Unicode: 01-basics/article.md
-    - 2. Unicode Character Database: 02-ucd-files/article.md
-    - 3. Кодировки UTF-8/16/32: 03-encodings/article.md
-    - 4. Нормализация: 04-normalization/article.md
-    - 5. Коллация и сортировка: 05-collation/article.md
-    - 6. Linux и инструменты: 06-linux-tools/article.md
+  - 1. Основы Unicode: 01-basics/article.md
+  - 2. Unicode Character Database: 02-ucd-files/article.md
+  - 3. Кодировки UTF-8/16/32: 03-encodings/article.md
+  - 4. Нормализация: 04-normalization/article.md
+  - 5. Коллация и сортировка: 05-collation/article.md
+  - 6. Linux и инструменты: 06-linux-tools/article.md
   - Ресурсы: resources.md
