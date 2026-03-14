@@ -40,6 +40,16 @@
 | Composition Exclusions | https://unicode.org/Public/UCD/latest/ucd/CompositionExclusions.txt |
 | NormalizationTest.txt | https://unicode.org/Public/UCD/latest/ucd/NormalizationTest.txt |
 
+## Полезные статьи и история
+
+| Ресурс | URL |
+|---|---|
+| История UTF-8 — рассказ Роба Пайка о том, как Кен Томпсон придумал UTF-8 за один вечер на салфетке в ресторане | [doc.cat-v.org/bell_labs/utf-8_history](http://doc.cat-v.org/bell_labs/utf-8_history) |
+| Unicode Text Segmentation (UAX#29) — алгоритм разбиения на графемные кластеры | https://unicode.org/reports/tr29/ |
+| Unicode Bidirectional Algorithm (UAX#9) — алгоритм двунаправленного текста | https://unicode.org/reports/tr9/ |
+| Unicode Identifier and Pattern Syntax (UAX#31) — что допустимо в идентификаторах | https://unicode.org/reports/tr31/ |
+| View non-printable Unicode characters — онлайн-инструмент для визуализации скрытых символов в строке (ZWJ, NBSP, BOM и т.п.) | [soscisurvey.de/tools/view-chars.php](https://www.soscisurvey.de/tools/view-chars.php) |
+
 ## Библиотеки и инструменты
 
 | Ресурс | URL |

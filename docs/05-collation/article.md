@@ -186,6 +186,8 @@ Natural sort:        file1, file2, file10   (правильно)
 
 ---
 
-## Примеры кода → `examples.py` и `examples.js`
+## Примеры кода
+
+[examples.py](https://github.com/comtextspace/unicode/blob/main/docs/05-collation/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/05-collation/examples.js)
 
 Для Python-примеров с PyICU: `pip install PyICU` (на Linux может потребоваться: `sudo apt install libicu-dev`)

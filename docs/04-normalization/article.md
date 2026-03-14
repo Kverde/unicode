@@ -175,4 +175,6 @@ def is_normalized(s: str, form: str) -> bool:
 
 ---
 
-## Примеры кода → `examples.py` и `examples.js`
+## Примеры кода
+
+[examples.py](https://github.com/comtextspace/unicode/blob/main/docs/04-normalization/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/04-normalization/examples.js)
