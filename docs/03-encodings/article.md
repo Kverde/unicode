@@ -254,6 +254,103 @@ echo $LANG  # обычно ru_RU.UTF-8
 
 ---
 
+## 7. Практика: байты, кодировки и ловушки
+
+### Mojibake — «кракозябры»
+
+**Mojibake** (文字化け) — японский термин, обозначающий нечитаемый текст, возникший в результате декодирования байтов с использованием неправильной кодировки. Дословно: «превращение символов».
+
+Классический пример — файл сохранён в Windows-1251 (русский), а открыт как UTF-8 или Latin-1:
+
+```python
+s = "Привет"
+encoded = s.encode("windows-1251")  # b'\xcf\xf0\xe8\xe2\xe5\xf2'
+
+print(encoded.decode("utf-8", errors="replace"))  # ???????? — замены
+print(encoded.decode("latin-1"))    # ÏðèâåÒ   — мусор без ошибок
+print(encoded.decode("windows-1251"))  # Привет  — правильно
+```
+
+Опасность Latin-1 в том, что она принимает **любой** байт (0x00..0xFF), поэтому декодирование всегда «успешно» — но результат бессмысленный. Программа не знает, что что-то пошло не так.
+
+Аналогично одни и те же байты `CF F0 E8 E2 E5 F2` в разных кодировках дают:
+
+| Кодировка | Результат |
+|---|---|
+| windows-1251 | Привет ✓ |
+| latin-1 | ÏðèâåÒ |
+| UTF-8 | UnicodeDecodeError |
+| CP866 (DOS) | ╧ЁЁЁ╓ |
+
+### Байты не хранят свою кодировку
+
+Это один из фундаментальных принципов: **кодировка — это метаданные, передаваемые отдельно от данных**. Посмотрев на последовательность байтов, нельзя точно сказать, в какой кодировке они записаны.
+
+Откуда программа узнаёт кодировку:
+
+- **HTTP-заголовок**: `Content-Type: text/html; charset=utf-8`
+- **HTML мета-тег**: `<meta charset="utf-8">`
+- **XML декларация**: `<?xml version="1.0" encoding="utf-8"?>`
+- **BOM** (U+FEFF в начале файла) — для UTF-8, UTF-16, UTF-32
+- **Договорённость** — «этот API всегда возвращает UTF-8»
+- **Файловая система** — например, исходники Python 3 по умолчанию UTF-8
+
+Если кодировка неизвестна, можно попробовать **угадать** через статистический анализ:
+
+```python
+import chardet
+
+with open("unknown.txt", "rb") as f:
+    raw = f.read()
+
+result = chardet.detect(raw)
+print(result)  # {'encoding': 'windows-1251', 'confidence': 0.73, 'language': 'Russian'}
+```
+
+Но это именно **угадывание** — `chardet` даёт вероятность, а не гарантию. Короткие строки или чистый ASCII угадываются плохо.
+
+### Unicode Sandwich
+
+«Unicode Sandwich» — паттерн правильной работы с текстом, описанный Ned Batchelder ([Pragmatic Unicode, PyCon 2012](http://nedbatchelder.com/text/unipain)):
+
+```
+[ bytes ] → decode → [ unicode ] → encode → [ bytes ]
+  вход      сразу     внутри       перед       выход
+            на краю   всегда       выходом
+```
+
+**Правило**: декодируйте входящие байты в Unicode как можно раньше, работайте со строками Unicode внутри программы, кодируйте обратно в байты как можно позже — непосредственно перед выводом.
+
+```python
+# ПЛОХО: смешиваем bytes и str
+def process(filename):
+    data = open(filename, "rb").read()      # bytes
+    result = data.replace(b"foo", b"bar")  # работаем с bytes
+    open("out.txt", "wb").write(result)    # bytes на выход
+
+# ХОРОШО: Unicode Sandwich
+def process(filename):
+    # Вход — декодируем сразу
+    text = open(filename, encoding="utf-8").read()   # str (unicode)
+
+    # Внутри — только str
+    result = text.replace("foo", "bar")
+
+    # Выход — кодируем в последний момент
+    open("out.txt", "w", encoding="utf-8").write(result)
+```
+
+В Python 3 это легко: `open()` в текстовом режиме делает decode/encode автоматически. Важно всегда явно указывать `encoding=` — иначе используется системная локаль, которая может быть неожиданной:
+
+```python
+# Явно лучше неявного
+open("file.txt", encoding="utf-8")           # правильно
+open("file.txt", encoding="windows-1251")    # правильно (если знаете)
+open("file.txt")  # использует locale.getpreferredencoding() — опасно
+```
+
+---
+
 ## Примеры кода
 
 [examples.py](https://github.com/comtextspace/unicode/blob/main/docs/03-encodings/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/03-encodings/examples.js)

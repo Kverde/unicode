@@ -5,7 +5,7 @@
 | Ресурс | URL |
 |---|---|
 | Unicode Standard (последняя версия онлайн) | https://www.unicode.org/versions/latest/ |
-| Unicode Standard 15.0 (PDF/HTML) | https://www.unicode.org/versions/Unicode15.0.0/ |
+| Unicode Standard 17.0 (PDF/HTML) | https://www.unicode.org/versions/Unicode17.0.0/ |
 | Unicode Glossary | https://www.unicode.org/glossary/ |
 | Unicode FAQ | https://www.unicode.org/faq/ |
 
@@ -45,6 +45,7 @@
 | Ресурс | URL |
 |---|---|
 | История UTF-8 — рассказ Роба Пайка о том, как Кен Томпсон придумал UTF-8 за один вечер на салфетке в ресторане | [doc.cat-v.org/bell_labs/utf-8_history](http://doc.cat-v.org/bell_labs/utf-8_history) |
+| Pragmatic Unicode (PyCon 2012, Ned Batchelder) — 5 законов Unicode и 3 практических правила: Unicode Sandwich, знай что у тебя за строка, тестируй | [nedbatchelder.com/text/unipain](http://nedbatchelder.com/text/unipain) |
 | Unicode Text Segmentation (UAX#29) — алгоритм разбиения на графемные кластеры | https://unicode.org/reports/tr29/ |
 | Unicode Bidirectional Algorithm (UAX#9) — алгоритм двунаправленного текста | https://unicode.org/reports/tr9/ |
 | Unicode Identifier and Pattern Syntax (UAX#31) — что допустимо в идентификаторах | https://unicode.org/reports/tr31/ |

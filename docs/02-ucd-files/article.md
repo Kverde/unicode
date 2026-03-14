@@ -72,7 +72,7 @@ wget https://unicode.org/Public/UCA/latest/allkeys.txt
 Простой файл: диапазон и имя блока.
 
 ```
-# Blocks-15.0.0.txt
+# Blocks-17.0.0.txt
 
 0000..007F; Basic Latin
 0080..00FF; Latin-1 Supplement
@@ -87,7 +87,7 @@ wget https://unicode.org/Public/UCA/latest/allkeys.txt
 ## 3. Scripts.txt — скрипты (письменности)
 
 ```
-# Scripts-15.0.0.txt
+# Scripts-17.0.0.txt
 0041..005A    ; Latin   # L&  [26] LATIN CAPITAL LETTER A..Z
 0061..007A    ; Latin   # L&  [26] LATIN SMALL LETTER A..Z
 0400..0481    ; Cyrillic # L& [130] CYRILLIC CAPITAL LETTER IE..
