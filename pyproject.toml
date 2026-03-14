@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "unicode-article"
+version = "0.1.0"
+description = "Серия технических статей о стандарте Unicode"
+authors = []
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+mkdocs-material = "^9.5"
+pymdown-extensions = "^10.7"
+mkdocs-minify-plugin = "^0.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry-core.masonry.api"

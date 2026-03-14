@@ -1,0 +1,15 @@
+# UCD data files (скачиваются отдельно, команды в resources.md)
+docs/02-ucd-files/data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Node.js
+node_modules/
+
+# MkDocs
+site/

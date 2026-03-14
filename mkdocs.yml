@@ -1,0 +1,72 @@
+site_name: Unicode в глубину
+site_description: Серия технических статей о стандарте Unicode — внутреннее устройство, кодировки, нормализация, коллация, инструменты
+site_author: Petro
+docs_dir: docs
+site_dir: site
+
+exclude_docs: |
+  **/examples.py
+  **/examples.js
+  **/data/
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.code.annotate
+    - search.highlight
+    - search.suggest
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      lang: ru
+  - minify:
+      minify_html: true
+
+nav:
+  - Статьи:
+    - 1. Основы Unicode: 01-basics/article.md
+    - 2. Unicode Character Database: 02-ucd-files/article.md
+    - 3. Кодировки UTF-8/16/32: 03-encodings/article.md
+    - 4. Нормализация: 04-normalization/article.md
+    - 5. Коллация и сортировка: 05-collation/article.md
+    - 6. Linux и инструменты: 06-linux-tools/article.md
+  - Ресурсы: resources.md
