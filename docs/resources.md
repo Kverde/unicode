@@ -51,7 +51,7 @@
 | Unicode Text Segmentation (UAX#29) — алгоритм разбиения на графемные кластеры | https://unicode.org/reports/tr29/ |
 | Unicode Bidirectional Algorithm (UAX#9) — алгоритм двунаправленного текста | https://unicode.org/reports/tr9/ |
 | Unicode Identifier and Pattern Syntax (UAX#31) — что допустимо в идентификаторах | https://unicode.org/reports/tr31/ |
-| View non-printable Unicode characters — онлайн-инструмент для визуализации скрытых символов в строке (ZWJ, NBSP, BOM и т.п.) | [soscisurvey.de/tools/view-chars.php](https://www.soscisurvey.de/tools/view-chars.php) |
+| View non-printable Unicode characters — онлайн-инструмент для визуализации скрытых символов в строке (ZWJ, NBSP, BOM и т. п.) | [soscisurvey.de/tools/view-chars.php](https://www.soscisurvey.de/tools/view-chars.php) |
 
 ## Библиотеки и инструменты
 

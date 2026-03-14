@@ -186,7 +186,7 @@ def scripts_in_string(s: str) -> set[str]:
             scripts.add('Cyrillic')
         elif 'LATIN' in name:
             scripts.add('Latin')
-        # и т.д.
+        # и т. д.
     return scripts
 
 # Лучше — через модуль regex (поддерживает \p{Script=...}):
