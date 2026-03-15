@@ -28,6 +28,38 @@ U+1F30D →  🌍 (EARTH GLOBE EUROPE-AFRICA)
 
 > **Важно:** кодовая точка — это _абстрактное число_, а не байты в памяти. Как именно хранить эти числа — задача **кодировок** (UTF-8, UTF-16, UTF-32). Это разные вещи! (Подробнее — в [статье 3](../03-encodings/article.md).)
 
+Стандартная библиотека Python предоставляет прямой доступ к свойствам Unicode Character Database (UCD — база данных всех символов, подробнее в [статье 2](../02-ucd-files/article.md)) через модуль `unicodedata`:
+
+```python
+import unicodedata
+
+for ch in ['A', 'А', '🌍', '½', '\u0301']:
+    cp = ord(ch)
+    print(f"U+{cp:05X}  cat={unicodedata.category(ch)}  {unicodedata.name(ch, '?')}")
+```
+
+```
+U+00041  cat=Lu  LATIN CAPITAL LETTER A
+U+00410  cat=Lu  CYRILLIC CAPITAL LETTER A
+U+1F30D  cat=So  EARTH GLOBE EUROPE-AFRICA
+U+000BD  cat=No  VULGAR FRACTION ONE HALF
+U+00301  cat=Mn  COMBINING ACUTE ACCENT
+```
+
+В JavaScript нет встроенного аналога `unicodedata`, но получить кодовую точку и создать символ по номеру можно через `codePointAt()` и `String.fromCodePoint()`:
+
+```javascript
+for (const ch of ['A', 'А', '🌍', '½', '\u0301']) {
+  const cp = ch.codePointAt(0);
+  console.log(`U+${cp.toString(16).toUpperCase().padStart(5, '0')}  ${ch}`);
+}
+
+// Обратное преобразование — из кодовой точки в символ:
+console.log(String.fromCodePoint(0x1F30D));  // 🌍
+```
+
+---
+
 ### Символ, глиф и шрифт
 
 Важное разграничение, которое в Unicode проводится явно:
@@ -99,10 +131,25 @@ U+0030 (0)  →  Script: Common      (обычная цифра 0 — общая
 U+0301 ( ́)  →  Script: Inherited   (combining accent наследует скрипт базового символа)
 ```
 
+В JavaScript (ES2018+) скрипт символа можно проверить через Unicode property escapes в регулярных выражениях с флагом `u`:
+
+```javascript
+// Проверка скрипта символа
+console.log(/\p{Script=Latin}/u.test('A'));      // true
+console.log(/\p{Script=Cyrillic}/u.test('А'));   // true  — кириллическая А (U+0410)
+console.log(/\p{Script=Arabic}/u.test('٠'));     // true  — арабская цифра
+console.log(/\p{Script=Common}/u.test('0'));     // true  — обычная цифра (общая для всех)
+
+// Детекция смешанных скриптов (anti-spoofing):
+// визуально «А» и «A» неотличимы, но принадлежат разным скриптам
+console.log('Apple  содержит кириллицу?', /\p{Script=Cyrillic}/u.test('Apple'));   // false
+console.log('Аpple  содержит кириллицу?', /\p{Script=Cyrillic}/u.test('Аpple'));   // true — первая «А» кириллическая!
+```
+
 Скрипты важны для:
 
 - Регулярных выражений: `\p{Script=Cyrillic}`
-- Обнаружения спуфинга (IDN homograph attacks) — подробнее в [статье 4, раздел «Unicode spoofing»](../04-normalization/article.md#unicode-spoofing)
+- Обнаружения спуфинга (IDN homograph attacks) — подробнее в [статье 5, раздел «Unicode spoofing»](../05-normalization/article.md#unicode-spoofing)
 - Выбора шрифта — операционная система и браузер используют скрипт символа, чтобы автоматически подобрать подходящий шрифт: латинский текст рендерится латинским шрифтом, арабский — арабским, даже если в CSS указан один и тот же `font-family`
 
 ---
@@ -182,13 +229,27 @@ U+0301 ( ́)  →  Script: Inherited   (combining accent наследует ск
 | Co | Other, Private Use | U+E000..U+F8FF | Символы для частного использования — Unicode не назначает им смысл, его определяет конкретное приложение |
 | Cn | Other, Not Assigned | — | Кодовые точки, которым ещё не назначен символ |
 
+В JavaScript категории символов доступны через Unicode property escapes — как конкретные подкатегории (`Lu`, `Nd`), так и группы по первой букве (`L`, `N`, `P`):
+
+```javascript
+// Конкретные подкатегории
+console.log('A  Lu?', /\p{Lu}/u.test('A'));       // true  — Letter, Uppercase
+console.log('a  Ll?', /\p{Ll}/u.test('a'));       // true  — Letter, Lowercase
+console.log('٣  Nd?', /\p{Nd}/u.test('٣'));       // true  — Number, Decimal (арабская тройка)
+console.log('€  Sc?', /\p{Sc}/u.test('€'));       // true  — Symbol, Currency
+console.log('◌́  Mn?', /\p{Mn}/u.test('\u0301')); // true  — Mark, Nonspacing (combining acute)
+
+// Группы (первая буква — все подкатегории сразу)
+console.log('中  L?', /\p{L}/u.test('中'));    // true  — любая буква (Lu + Ll + Lt + Lm + Lo)
+console.log('½  N?', /\p{N}/u.test('½'));     // true  — любое число (Nd + Nl + No)
+console.log('«  P?', /\p{P}/u.test('«'));     // true  — любая пунктуация
+console.log('©  S?', /\p{S}/u.test('©'));     // true  — любой символ (Sm + Sc + Sk + So)
+
+// Практический пример: оставить только буквы и цифры из любых письменностей
+console.log('café 中文 123 !!!'.replace(/[^\p{L}\p{N}]/gu, ''));  // café中文123
+```
+
 ---
 
 Все свойства символов (имя, категория, декомпозиция, числовые значения, правила регистра и др.) хранятся в **Unicode Character Database (UCD)** — наборе текстовых файлов, публикуемых вместе с каждой версией стандарта. Полный разбор всех UCD-файлов, форматов и примеров парсинга — в [статье 2](../02-ucd-files/article.md).
 
----
-
-## Примеры кода
-
-Запустите примеры из соседних файлов, чтобы исследовать свойства символов интерактивно:
-[examples.py](https://github.com/comtextspace/unicode/blob/main/docs/01-basics/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/01-basics/examples.js)

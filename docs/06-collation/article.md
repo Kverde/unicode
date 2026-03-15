@@ -1,4 +1,4 @@
-# Статья 5. Коллация: Unicode Collation Algorithm и CLDR
+# Статья 6. Коллация: Unicode Collation Algorithm и CLDR
 
 ## Почему простая сортировка не работает?
 
@@ -155,28 +155,19 @@ sorted(['Müller', 'Mueller', 'Meier'], key=de_phone.getSortKey)
 
 ```javascript
 // Базовая сортировка с учётом русского языка
-const collator = new Intl.Collator('ru');
-['ёж', 'Ель', 'елка', 'Ёж'].sort(collator.compare);
-// ['Ель', 'Ёж', 'елка', 'ёж']
-
-// Параметры чувствительности:
-// 'base'    — только базовые буквы (a = á = A)
-// 'accent'  — + диакритика (a ≠ á, a = A)
-// 'case'    — + регистр (a ≠ A, a = á)
-// 'variant' — всё различается (по умолчанию)
-const caseInsensitive = new Intl.Collator('ru', { sensitivity: 'base' });
-caseInsensitive.compare('Ёж', 'ёж')  // 0 — равны
+const col = new Intl.Collator('ru');
+console.log(['ёж', 'Ель', 'елка', 'Ёж'].sort(col.compare));
+// ['Ель', 'Ёж', 'елка', 'ёж']  — ё рядом с е, регистр игнорируется
 
 // Числа внутри строк (natural sort)
 const natural = new Intl.Collator('ru', { numeric: true });
-['file10', 'file2', 'file1'].sort(natural.compare);
+console.log(['file10', 'file2', 'file1'].sort(natural.compare));
 // ['file1', 'file2', 'file10']  — правильно!
 
-// Получить sort key (для кэширования при больших объёмах)
-const keys = ['ёж', 'Ель'].map(w => ({
-    word: w,
-    key: collator.resolvedOptions()  // ключи через ICU внутри движка
-}));
+// Сравнение без учёта регистра и диакритики
+const base = new Intl.Collator('en', { sensitivity: 'base' });
+console.log(base.compare('café', 'cafe'));  // 0 — равны на base-уровне
+console.log(base.compare('Ёж', 'ёж'));      // 0 — равны
 ```
 
 ### Встроенный `sorted` vs PyICU
@@ -257,10 +248,5 @@ Natural sort:        file1, file2, file10   (правильно)
 
 Реализуется через дополнительный L4-уровень или предобработку.
 
----
-
-## Примеры кода
-
-[examples.py](https://github.com/comtextspace/unicode/blob/main/docs/05-collation/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/05-collation/examples.js)
-
-Для Python-примеров с PyICU: `pip install PyICU` (на Linux может потребоваться: `sudo apt install libicu-dev`)
+!!! note "PyICU"
+    Для Python-примеров с `icu.Collator` нужен PyICU: `pip install PyICU`. На Linux может потребоваться: `sudo apt install libicu-dev`. JavaScript примеры работают напрямую в браузере через кнопку выше — библиотек не нужно.

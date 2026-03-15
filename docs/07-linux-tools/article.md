@@ -1,4 +1,4 @@
-# Статья 6. Unicode на практике: Linux, инструменты, исходники ICU
+# Статья 7. Unicode на практике: Linux, инструменты, исходники ICU
 
 ## 1. Unicode-инструменты в Linux
 
@@ -265,17 +265,40 @@ regex.findall(r'\X', text)   # каждый кластер = один элеме
 
 ---
 
-## 4. Практический скрипт: анализ Unicode-состава текста
+## 4. Анализ Unicode-состава текста на Python
 
-Смотрите [examples.py](https://github.com/comtextspace/unicode/blob/main/docs/06-linux-tools/examples.py) — скрипт анализирует произвольный текст и выводит статистику по скриптам, категориям, блокам и эмодзи.
+Несколько строк для базовой статистики — категории, скрипты, эмодзи:
 
-Пример запуска:
-```bash
-# Анализ файла
-python3 examples.py article.md
+```python
+import unicodedata
+from collections import Counter
 
-# Анализ stdin
-echo "Hello Привет مرحبا 🌍" | python3 examples.py -
+text = "Hello Привет مرحبا 🌍🎉 café 中文"
+
+# Подсчёт по категориям General Category
+cats = Counter(unicodedata.category(c) for c in text if c != ' ')
+for cat, n in sorted(cats.items(), key=lambda x: -x[1]):
+    print(f"  {cat}: {n}")
+```
+
+```
+  Ll: 10
+  Lo: 5
+  Lu: 2
+  So: 2
+  Mn: 1
+  Po: 1
+```
+
+```python
+import regex  # pip install regex
+
+text = "Hello Привет مرحبا 🌍🎉"
+print(regex.findall(r'\p{Script=Latin}+',    text))  # ['Hello']
+print(regex.findall(r'\p{Script=Cyrillic}+', text))  # ['Привет']
+print(regex.findall(r'\p{Script=Arabic}+',   text))  # ['مرحبا']
+print(regex.findall(r'\p{Emoji_Presentation}', text)) # ['🌍', '🎉']
+print(regex.findall(r'\X', '👨‍👩‍👧'))             # ['👨\u200d👩\u200d👧'] — 1 кластер
 ```
 
 ---

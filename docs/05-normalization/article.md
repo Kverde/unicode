@@ -1,4 +1,4 @@
-# Статья 4. Нормализация Unicode: NFD, NFC, NFKD, NFKC
+# Статья 5. Нормализация Unicode: NFD, NFC, NFKD, NFKC
 
 ## Проблема: один символ — много представлений
 
@@ -224,8 +224,3 @@ def is_normalized(s: str, form: str) -> bool:
 
 `is_normalized` работает быстрее `normalize()` когда строка уже нормализована — не создаёт новый объект.
 
----
-
-## Примеры кода
-
-[examples.py](https://github.com/comtextspace/unicode/blob/main/docs/04-normalization/examples.py) · [examples.js](https://github.com/comtextspace/unicode/blob/main/docs/04-normalization/examples.js)
