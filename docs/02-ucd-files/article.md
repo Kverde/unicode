@@ -46,16 +46,16 @@ wget https://unicode.org/Public/UCA/latest/allkeys.txt
 | 3 | General Category | `Lu` | Lu=Uppercase Letter |
 | 4 | Canonical Combining Class | `0` | 0=не combining mark |
 | 5 | Bidi Class | `L` | L=Left-to-Right |
-| 6 | Decomposition | (пусто) | Тип и кодовые точки |
-| 7 | Decimal Digit Value | (пусто) | Только для цифр Nd |
-| 8 | Digit Value | (пусто) | Digit-значение |
-| 9 | Numeric Value | (пусто) | Для дробей (½ → 1/2) |
-| 10 | Mirrored | `N` | Y=зеркалится в RTL |
-| 11 | Unicode 1.0 Name | (пусто) | Устаревшее |
-| 12 | ISO Comment | (пусто) | Устаревшее |
-| 13 | Uppercase Mapping | (пусто) | Simple uppercase |
-| 14 | Lowercase Mapping | `0061` | → 'a' |
-| 15 | Titlecase Mapping | (пусто) | Если = uppercase, пусто |
+| 6 | Decomposition | `0065 0301` (для é) | Как символ раскладывается на более простые. Пустое поле = символ атомарный. Если нет тега — **каноническая** декомпозиция: `00E9` → `0065 0301` (e + combining acute). Если есть тег — **совместимая**: `00BC` (¼) → `<fraction> 0031 2044 0034`. Подробнее — в [статье 4](../04-normalization/article.md) |
+| 7 | Decimal Digit Value | `5` (для символа `5`) | Цифровое значение 0..9, если символ — десятичная цифра (категория `Nd`). Для не-цифр — пусто |
+| 8 | Digit Value | (пусто) | Расширенная категория цифр: надстрочные ¹²³ и другие нестандартные цифры, не вошедшие в поле 7. Сейчас почти не используется отдельно от поля 7 |
+| 9 | Numeric Value | `1/4` (для ¼) | Рациональное число для любых символов с числовым смыслом: дроби (¼ → `1/4`), римские цифры (Ⅳ → `4`). Для обычных цифр совпадает с полем 7 |
+| 10 | Mirrored | `N` | Y = символ зеркалится при RTL-тексте: `(` становится `)`, `<` становится `>` |
+| 11 | Unicode 1.0 Name | (пусто) | Устаревшее старое имя из Unicode 1.0 (если отличалось) |
+| 12 | ISO Comment | (пусто) | Устаревший комментарий ISO |
+| 13 | Uppercase Mapping | (пусто) | Simple Uppercase Mapping — кодовая точка заглавного варианта (если однозначна) |
+| 14 | Lowercase Mapping | `0061` | Simple Lowercase Mapping → `a`. Пусто, если символ уже строчной |
+| 15 | Titlecase Mapping | (пусто) | Simple Titlecase Mapping. Пусто, если совпадает с Uppercase |
 
 ### Разбор строки по шагам
 
